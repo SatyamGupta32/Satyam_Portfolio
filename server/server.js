@@ -1,47 +1,50 @@
-const express = require('express');
+// server.js (or index.js)
+const express    = require('express');
+const nodemailer = require('nodemailer');
+const cors       = require('cors');
 const bodyParser = require('body-parser');
-const path = require('path');
-const cors = require('cors');
-const { sendEmail } = require('./mailer'); // Import custom email function
+const path       = require('path');
 
 const app = express();
-const PORT = 3000;
-
-// Enable CORS
 app.use(cors());
-
-// Middleware
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../public'))); // Serve static files from "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
 
-// API route for sending emails
+const transporter = nodemailer.createTransport({
+  host: 'smtp.your-smtp-host.com',
+  port: 587,            // or 465
+  secure: false,        // true for 465, false for other ports
+  auth: {
+    user: 'youremail@domain.com',
+    pass: 'your_smtp_password'
+  }
+});
+
 app.post('/contact', async (req, res) => {
   const { first_name, last_name, email, message } = req.body;
-
   if (!first_name || !last_name || !email || !message) {
-    return res.status(400).json({ error: 'All fields are required.' });
+    return res.status(400).json({ error: 'All fields are required' });
   }
 
   try {
-    // Send email using custom SMTP function
-    const response = await sendEmail({
-      from: 'youremail@example.com', // Replace with your email
-      to: 'recipient@example.com', // Replace with your email (who receives contact submissions)
-      subject: `Contact Form Submission from ${first_name} ${last_name}`,
-      body: `Message from ${email}:\n\n${message}`,
+    await transporter.sendMail({
+      from: `"Portfolio Contact" <youremail@domain.com>`,
+      to:   'satyamg501@gmail.com',    // <-- where you want to receive it
+      subject: `New message from ${first_name} ${last_name}`,
+      text: `You got a message from ${email}:\n\n${message}`
     });
 
-    res.status(200).json({ message: 'Email sent successfully!', response });
-  } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ error: 'Failed to send email.' });
+    return res.sendStatus(200);
+  } catch (err) {
+    console.error('Email error:', err);
+    return res.status(500).json({ error: 'Failed to send email' });
   }
 });
 
-// Serve the frontend for other requests
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
-});
+// Let React/router handle everything else
+app.get('*', (req, res) =>
+  res.sendFile(path.join(__dirname, 'public/index.html'))
+); 
 
 // Start the server
 app.listen(PORT, () => {
