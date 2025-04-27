@@ -451,6 +451,10 @@ nav .menu:hover {
 }
 
 .project-card {
+    a{
+        text-decoration: none;
+        color: inherit;
+    }
     background: #f9f9f9;
     border-radius: 10px;
     overflow: hidden;
@@ -669,8 +673,11 @@ form textarea {
 }
 
 form button {
-    background: #0073e6;
-    color: white;
+    a{
+        background: #0073e6;
+        color: white;
+        text-decoration: none;
+    }
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -681,6 +688,8 @@ form button {
 
 form button:hover {
     background: #005bb5;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
 }
 
 .terms {
