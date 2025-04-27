@@ -1,7 +1,7 @@
 {
   "name": "satyam_portfolio",
   "version": "1.0.0",
-  "main": "script.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,7 +12,10 @@
   "dependencies": {
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^4.21.2",
+    "nodemailer": "^6.10.1",
+    "nodemon": "^3.1.10",
     "satyam_portfolio": "file:"
   }
 }

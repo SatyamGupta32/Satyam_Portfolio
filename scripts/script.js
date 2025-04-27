@@ -170,36 +170,49 @@ function showTextSequentially() {
     showNext();
 }
 
-document
-  .querySelector('.contact-form form')
-  .addEventListener('submit', async (e) => {
+
+const form = document.querySelector('.contact-form form');
+
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const form = e.target;
-    const data = {
-      first_name: form.first_name.value,
-      last_name:  form.last_name.value,
-      email:      form.email.value,
-      message:    form.message.value,
-    };
+    const firstName = form.first_name.value.trim();
+    const lastName = form.last_name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    // Client-side validation
+    if (!firstName || !lastName || !email || !message) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    const data = { first_name: firstName, last_name: lastName, email, message };
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true; // Disable the submit button to prevent multiple clicks
 
     try {
-      const res = await fetch('/contact', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(data),
-      });
+        const res = await fetch('http://localhost:3000/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
 
-      if (!res.ok) throw new Error('Network response was not ok');
+        if (!res.ok) throw new Error('Network response was not ok');
 
-      // on success: reset the form & optionally show a thank-you
-      form.reset();
-      alert('Thanks for reaching out! We’ll get back to you soon.');
+        form.reset();
+        alert('Thanks for reaching out! We’ll get back to you soon.');
     } catch (err) {
-      console.error(err);
-      alert('Sorry, something went wrong. Please try again later.');
+        console.error(err);
+        alert('Sorry, something went wrong. Please try again later.');
+    } finally {
+        submitButton.disabled = false; // Re-enable the submit button after processing
     }
 });
 
+
 // Run on page load or call when needed
-document.addEventListener('DOMContentLoaded', showTextSequentially);
+document.addEventListener('DOMContentLoaded', () => {
+    showTextSequentially();
+
+});

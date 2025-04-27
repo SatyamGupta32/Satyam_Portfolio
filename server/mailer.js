@@ -1,43 +1,32 @@
-const net = require('net');
+const path       = require('path');
+require('dotenv').config({
+  path: path.resolve(__dirname, '../.env.local')   // ← point to the real location
+});
+const nodemailer = require('nodemailer');
 
-// SMTP email sending function
-function sendEmail({ from, to, subject, body }) {
-  return new Promise((resolve, reject) => {
-    const smtpHost = 'smtp.your-email-provider.com'; // Replace with your SMTP server
-    const smtpPort = 587; // SMTP port (use 465 for SSL, 587 for STARTTLS)
-    const username = 'youremail@example.com'; // Replace with your email
-    const password = 'your-email-password'; // Replace with your email password
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT) || 587,
+  secure: process.env.SMTP_SECURE === 'true',
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
+});
 
-    const client = net.createConnection(smtpPort, smtpHost, () => {
-      let stage = 0;
-      const commands = [
-        `EHLO localhost`,
-        `AUTH LOGIN`,
-        Buffer.from(username).toString('base64'), // Email (Base64 encoded)
-        Buffer.from(password).toString('base64'), // Password (Base64 encoded)
-        `MAIL FROM:<${from}>`,
-        `RCPT TO:<${to}>`,
-        `DATA`,
-        `Subject: ${subject}\r\nFrom: ${from}\r\nTo: ${to}\r\n\r\n${body}\r\n.\r\n`,
-        `QUIT`,
-      ];
+async function sendContactEmail({ first_name, last_name, email, message }) {
+  if (!first_name || !last_name || !email || !message) {
+    throw new Error('All fields are required');
+  }
 
-      client.on('data', (data) => {
-        console.log('SMTP Response:', data.toString());
-        if (stage < commands.length) {
-          client.write(commands[stage] + '\r\n');
-          stage++;
-        } else {
-          client.end();
-          resolve('Email sent successfully!');
-        }
-      });
+  const mailOptions = {
+    from: `"Portfolio Contact" <${process.env.SMTP_USER}>`,
+    to: process.env.CONTACT_RECIPIENT,
+    subject: `New message from ${first_name} ${last_name}`,
+    text: `You got a message from ${email}:\n\n${message}`
+  };
 
-      client.on('error', (err) => {
-        reject(err);
-      });
-    });
-  });
+  return transporter.sendMail(mailOptions);
 }
 
-module.exports = { sendEmail };
+module.exports = { transporter, sendContactEmail };

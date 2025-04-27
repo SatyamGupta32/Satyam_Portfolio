@@ -27,10 +27,13 @@ This portfolio is a single-page application built with smooth animations and tra
 ```
 Satyam_Portfolio/
 ├── index.html       # Main HTML file
-├── css/
+├── style/
 │   ├── style.css      # normal style
 │   └── responsive.css # responsive style
-├── js/       
+├── server/
+│   ├── mailer.js      # mailer file
+│   └── server.js      # server file
+├── scripts/       
 │   └── script.js      # gsap & Locomotive Scroll setup
 └── assets/
     └──                # Images , gif & video which are used in the portfolio
