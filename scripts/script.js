@@ -170,35 +170,36 @@ function showTextSequentially() {
     showNext();
 }
 
-document.querySelector('.contact-form form').addEventListener('submit', async (event) => {
-    event.preventDefault();
+document
+  .querySelector('.contact-form form')
+  .addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    const form = event.target;
-    const formData = {
+    const form = e.target;
+    const data = {
       first_name: form.first_name.value,
-      last_name: form.last_name.value,
-      email: form.email.value,
-      message: form.message.value,
+      last_name:  form.last_name.value,
+      email:      form.email.value,
+      message:    form.message.value,
     };
 
     try {
-      const response = await fetch('/contact', {
-        method: 'POST',
+      const res = await fetch('/contact', {
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body:    JSON.stringify(data),
       });
 
-      if (response.ok) {
-        document.querySelector('#formMessage').style.display = 'block';
-        form.reset();
-      } else {
-        alert('Failed to send email. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again later.');
+      if (!res.ok) throw new Error('Network response was not ok');
+
+      // on success: reset the form & optionally show a thank-you
+      form.reset();
+      alert('Thanks for reaching out! We’ll get back to you soon.');
+    } catch (err) {
+      console.error(err);
+      alert('Sorry, something went wrong. Please try again later.');
     }
-  });
+});
 
 // Run on page load or call when needed
 document.addEventListener('DOMContentLoaded', showTextSequentially);
