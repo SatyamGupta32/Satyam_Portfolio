@@ -28,12 +28,12 @@ This portfolio is a single-page application built with smooth animations and tra
 Satyam_Portfolio/
 ├── index.html       # Main HTML file
 ├── css/
-│   └── styles.css   # Custom styles
-├── js/
-│   ├── gsap.js      # GSAP animations
-│   └── locomotive.js # Locomotive Scroll setup
+│   ├── style.css      # normal style
+│   └── responsive.css # responsive style
+├── js/       
+│   └── script.js      # gsap & Locomotive Scroll setup
 └── assets/
-    └── images/      # Images used in the portfolio
+    └──                # Images , gif & video which are used in the portfolio
 ```
 
 ## Features
