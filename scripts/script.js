@@ -6,6 +6,10 @@ function locoScrollTrigger() {
     const locoScroll = new LocomotiveScroll({
         el: document.querySelector(".main"),
         smooth: true,
+        // force it on smartphones and tablets:
+        multiplier: 0.9,
+        smartphone: { smooth: true },
+        tablet:     { smooth: true },
     });
 
     locoScroll.on("scroll", ScrollTrigger.update);

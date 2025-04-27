@@ -151,6 +151,16 @@
     }
 }
 
+@media screen and (max-width: 768px) {
+    html,
+    body,
+    .main {
+      overflow: auto !important;
+      /* Safari iOS smooth scroll */
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+
 @media screen and (max-width:430px) {
 
     .page1 .cursor {
