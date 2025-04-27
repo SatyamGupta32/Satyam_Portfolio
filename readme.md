@@ -52,11 +52,15 @@ Satyam_Portfolio/
    ```bash
    git clone https://github.com/your-username/Satyam_Portfolio.git
    ```
-2. Navigate to the project directory:
+2. Main project Link:
+   ```bash
+   https://satyam-portfolio-blush.vercel.app/
+   ```
+3. Navigate to the project directory:
    ```bash
    cd Satyam_Portfolio
    ```
-3. Open `index.html` in your browser to view the portfolio.
+4. Open `index.html` in your browser to view the portfolio.
 
 ## License
 
